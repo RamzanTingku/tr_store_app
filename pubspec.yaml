@@ -13,6 +13,12 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
 
+  #comparing dart objects
+  equatable: ^2.0.5
+
+  #make request to api
+  retrofit: ^3.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
