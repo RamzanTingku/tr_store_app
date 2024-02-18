@@ -4,7 +4,7 @@ import 'package:tr_store_app/features/product_list/data/models/product_model.dar
 @dao
 abstract class ProductsDao {
 
-  @Insert()
+  @Insert(onConflict : OnConflictStrategy.replace)
   Future<void> insertProducts(List<ProductModel> products);
 
   @Insert()

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:tr_store_app/features/product_list/domain/entities/product.dart';
 
-import '../../../../core/data/data_state.dart';
+import '../../../../core/data_state/data_state.dart';
 import '../../../../core/local_db/app_database.dart';
 import '../../domain/repository/products_repository.dart';
 import '../data_sources/remote/products_api_service.dart';

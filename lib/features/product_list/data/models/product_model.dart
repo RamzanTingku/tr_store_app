@@ -1,44 +1,44 @@
 import 'package:floor/floor.dart';
 import 'package:tr_store_app/features/product_list/domain/entities/product.dart';
 
-@Entity(tableName: 'product',primaryKeys: ['id'])
+@Entity(tableName: 'product', primaryKeys: ['id'])
 class ProductModel extends ProductEntity{
 
-  ProductModel({
-    int ? id,
-    String ? title,
-    String ? content,
+  const ProductModel({
+    required int  id,
+    String ? name,
+    String ? description,
     String ? image,
     String ? thumbnail,
-    String ? userId,
+    double ? price,
   }): super(
     id: id,
-    name: title,
-    description: content,
+    name: name,
+    description: description,
     image: image,
     thumbnail: thumbnail,
-    price: double.tryParse(userId??"0"),
+    price: price,
   );
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
       id: json['id'],
-      content: json['content'],
-      title: json['title'],
+      description: json['content'],
+      name: json['title'],
       image: json['image'],
       thumbnail: json['thumbnail'],
-      userId: json['userId']?.toString(),
+      price:  double.tryParse(json['userId']?.toString()??"0"),
     );
   }
 
   factory ProductModel.fromEntity(ProductEntity entity) {
     return ProductModel(
-        id: entity.id,
-        title: entity.name,
-        content: entity.description,
+        id: entity.id??0,
+        name: entity.name,
+        description: entity.description,
         image: entity.image,
         thumbnail: entity.thumbnail,
-        userId: entity.price?.toString()
+        price: entity.price
     );
   }
 }

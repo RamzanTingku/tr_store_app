@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tr_store_app/config/theme/app_themes.dart';
+import 'package:tr_store_app/features/product_list/presentation/provider/product_list_provider.dart';
 import 'package:tr_store_app/features/product_list/presentation/view/product_list_screen.dart';
 
-import 'config/di/injection_container.dart';
 import 'config/routes/routes.dart';
+import 'core/networking/internet_connectivity.dart';
+import 'di/injection_container.dart';
 
 
 Future<void> main() async {
@@ -12,17 +15,41 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    InternetConnectivity().subscribeConnectivityLister();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: appTheme(),
-        onGenerateRoute: AppRoutes.onGenerateRoutes,
-        home: const ProductListScreen()
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ProductListProvider>(
+            create: (context) => ProductListProvider()),
+      ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: appTheme(),
+          onGenerateRoute: AppRoutes.onGenerateRoutes,
+          home: const ProductListScreen()
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    InternetConnectivity().closeSubscriptions();
+    super.dispose();
   }
 }
 

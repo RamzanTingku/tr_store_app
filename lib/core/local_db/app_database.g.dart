@@ -142,15 +142,18 @@ class _$ProductsDao extends ProductsDao {
   Future<List<ProductModel>> getProducts() async {
     return _queryAdapter.queryList('SELECT * FROM product',
         mapper: (Map<String, Object?> row) => ProductModel(
-            id: row['id'] as int?,
+            id: row['id'] as int,
+            name: row['name'] as String?,
+            description: row['description'] as String?,
             image: row['image'] as String?,
-            thumbnail: row['thumbnail'] as String?));
+            thumbnail: row['thumbnail'] as String?,
+            price: row['price'] as double?));
   }
 
   @override
   Future<void> insertProducts(List<ProductModel> products) async {
     await _productModelInsertionAdapter.insertList(
-        products, OnConflictStrategy.abort);
+        products, OnConflictStrategy.replace);
   }
 
   @override
