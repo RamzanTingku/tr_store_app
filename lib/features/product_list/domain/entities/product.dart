@@ -8,8 +8,8 @@ class ProductEntity extends Equatable{
   final String? image;
   final String? thumbnail;
 
-  const ProductEntity(this.id,
-      {this.name, this.description, this.price, this.image, this.thumbnail});
+  const ProductEntity(
+      {this.id,this.name, this.description, this.price, this.image, this.thumbnail});
 
   @override
   List<Object?> get props {

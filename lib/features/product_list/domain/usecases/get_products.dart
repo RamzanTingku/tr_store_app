@@ -1,10 +1,10 @@
 import 'package:tr_store_app/features/product_list/domain/entities/product.dart';
 import '../../../../core/data/data_state.dart';
-import '../repository/product_repository.dart';
+import '../repository/products_repository.dart';
 
 class GetProductUseCase{
   
-  final ProductRepository _productRepository;
+  final ProductsRepository _productRepository;
 
   GetProductUseCase(this._productRepository);
 
