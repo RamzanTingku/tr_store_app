@@ -9,14 +9,14 @@ import '../data_sources/remote/products_api_service.dart';
 import '../models/product_model.dart';
 
 class ProductsRepositoryImpl implements ProductsRepository {
-  final ProductsApiService _newsApiService;
+  final ProductsApiService _productApiService;
   final AppDatabase _appDatabase;
-  ProductsRepositoryImpl(this._newsApiService,this._appDatabase);
+  ProductsRepositoryImpl(this._productApiService, this._appDatabase);
 
   @override
   Future<DataState<List<ProductEntity>>> getProducts() async {
     try {
-      final httpResponse = await _newsApiService.getProducts();
+      final httpResponse = await _productApiService.getProducts();
 
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(httpResponse.data);

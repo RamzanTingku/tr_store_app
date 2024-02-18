@@ -27,7 +27,7 @@ class ProductModel extends ProductEntity{
       title: json['title'],
       image: json['image'],
       thumbnail: json['thumbnail'],
-      userId: json['userId'],
+      userId: json['userId']?.toString(),
     );
   }
 

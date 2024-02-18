@@ -1,4 +1,4 @@
 class Urls{
-  static const baseUrl = "https://jsonplaceholder.org/posts";
+  static const baseUrl = "https://jsonplaceholder.org";
   static const posts = "/posts";
 }

@@ -13,7 +13,7 @@ class _ProductsApiService implements ProductsApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://jsonplaceholder.org/posts';
+    baseUrl ??= 'https://jsonplaceholder.org';
   }
 
   final Dio _dio;
