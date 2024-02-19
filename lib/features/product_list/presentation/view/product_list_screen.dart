@@ -26,9 +26,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   void initState() {
     _productListProvider = context.read<ProductListProvider>();
-    _internetCheckSubscription = InternetConnectivity().connectivityStream.listen((hasInternet) {
-      print("ProductListScreen $hasInternet");
-      _productListProvider.getProducts();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      _internetCheckSubscription = InternetConnectivity().connectivityStream.listen((hasInternet) {
+        _productListProvider.onConnectionUpdate(hasInternet);
+      });
     });
     super.initState();
   }
@@ -95,6 +96,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       ],
                     ),
                     Text(product.price.toString()??""),
+                    Text(product.qty.toString()??""),
                   ],
                 ),
               ),

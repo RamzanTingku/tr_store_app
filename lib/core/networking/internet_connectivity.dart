@@ -16,9 +16,12 @@ class InternetConnectivity{
   Sink<bool> get _connectivitySink => _connectivityStreamController.sink;
   Stream<bool> get connectivityStream => _connectivityStreamController.stream;
 
+  bool hasInternet = true;
+
   Future<bool> checkInternet() async {
     ConnectivityResult result = await Connectivity().checkConnectivity();
-    return (result == ConnectivityResult.mobile || result ==  ConnectivityResult.wifi) && await _checkConnection();
+    hasInternet = (result == ConnectivityResult.mobile || result ==  ConnectivityResult.wifi) && await _checkConnection();
+    return hasInternet;
   }
 
   Future<bool> _checkConnection() async {
@@ -31,7 +34,9 @@ class InternetConnectivity{
   }
 
   Future<void> subscribeConnectivityLister() async{
-    _connectivitySink.add(await checkInternet());
+    if(!await checkInternet()){
+      _connectivitySink.add(await checkInternet());
+    }
     _connectivityStreamSubscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) async {
       _connectivitySink.add(await checkInternet());
     });

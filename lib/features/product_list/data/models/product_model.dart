@@ -11,6 +11,7 @@ class ProductModel extends ProductEntity{
     String ? image,
     String ? thumbnail,
     double ? price,
+    int ? qty,
   }): super(
     id: id,
     name: name,
@@ -18,6 +19,7 @@ class ProductModel extends ProductEntity{
     image: image,
     thumbnail: thumbnail,
     price: price,
+    qty: qty,
   );
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -38,7 +40,20 @@ class ProductModel extends ProductEntity{
         description: entity.description,
         image: entity.image,
         thumbnail: entity.thumbnail,
-        price: entity.price
+        price: entity.price,
+        qty: entity.qty,
+    );
+  }
+
+  factory ProductModel.updateQty(ProductEntity entity, int qty) {
+    return ProductModel(
+        id: entity.id??0,
+        name: entity.name,
+        description: entity.description,
+        image: entity.image,
+        thumbnail: entity.thumbnail,
+        price: entity.price,
+        qty: qty,
     );
   }
 }

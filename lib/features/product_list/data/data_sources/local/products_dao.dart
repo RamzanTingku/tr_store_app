@@ -5,11 +5,20 @@ import 'package:tr_store_app/features/product_list/data/models/product_model.dar
 abstract class ProductsDao {
 
   @Insert(onConflict : OnConflictStrategy.replace)
+  Future<void> insertProduct(ProductModel product);
+
+  @Insert(onConflict : OnConflictStrategy.replace)
   Future<void> insertProducts(List<ProductModel> products);
 
-  @Insert()
+  @Insert(onConflict : OnConflictStrategy.replace)
+  Future<void> updateProduct(ProductModel product);
+
+  @Insert(onConflict : OnConflictStrategy.replace)
   Future<void> updateProducts(List<ProductModel> products);
   
+  @delete
+  Future<void> deleteProduct(ProductModel products);
+
   @delete
   Future<void> deleteProducts(List<ProductModel> products);
 

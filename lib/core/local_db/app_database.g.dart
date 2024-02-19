@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `product` (`id` INTEGER, `name` TEXT, `description` TEXT, `price` REAL, `image` TEXT, `thumbnail` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `product` (`id` INTEGER, `name` TEXT, `description` TEXT, `price` REAL, `image` TEXT, `thumbnail` TEXT, `qty` INTEGER, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -113,7 +113,8 @@ class _$ProductsDao extends ProductsDao {
                   'description': item.description,
                   'price': item.price,
                   'image': item.image,
-                  'thumbnail': item.thumbnail
+                  'thumbnail': item.thumbnail,
+                  'qty': item.qty
                 }),
         _productModelDeletionAdapter = DeletionAdapter(
             database,
@@ -125,7 +126,8 @@ class _$ProductsDao extends ProductsDao {
                   'description': item.description,
                   'price': item.price,
                   'image': item.image,
-                  'thumbnail': item.thumbnail
+                  'thumbnail': item.thumbnail,
+                  'qty': item.qty
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -147,7 +149,14 @@ class _$ProductsDao extends ProductsDao {
             description: row['description'] as String?,
             image: row['image'] as String?,
             thumbnail: row['thumbnail'] as String?,
-            price: row['price'] as double?));
+            price: row['price'] as double?,
+            qty: row['qty'] as int?));
+  }
+
+  @override
+  Future<void> insertProduct(ProductModel product) async {
+    await _productModelInsertionAdapter.insert(
+        product, OnConflictStrategy.replace);
   }
 
   @override
@@ -157,9 +166,20 @@ class _$ProductsDao extends ProductsDao {
   }
 
   @override
+  Future<void> updateProduct(ProductModel product) async {
+    await _productModelInsertionAdapter.insert(
+        product, OnConflictStrategy.replace);
+  }
+
+  @override
   Future<void> updateProducts(List<ProductModel> products) async {
     await _productModelInsertionAdapter.insertList(
-        products, OnConflictStrategy.abort);
+        products, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteProduct(ProductModel products) async {
+    await _productModelDeletionAdapter.delete(products);
   }
 
   @override

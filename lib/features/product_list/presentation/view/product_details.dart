@@ -28,7 +28,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ProductListProvider>().getProducts();
+    //context.read<ProductListProvider>().getProducts();
     return const Placeholder();
   }
 
