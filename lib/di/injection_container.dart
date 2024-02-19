@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:tr_store_app/core/networking/dio_client.dart';
 import 'package:tr_store_app/features/product_list/data/repository/products_repository_impl.dart';
 import '../../core/local_db/app_database.dart';
 import '../../features/product_list/data/data_sources/remote/products_api_service.dart';
@@ -25,10 +26,7 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<AppDatabase>(database);
   
   // Dio
-  sl.registerSingleton<Dio>(Dio()
-    ..interceptors.add(
-      PrettyDioLogger(requestHeader: true, requestBody: true),
-    ));
+  sl.registerSingleton<Dio>(DioClient.getDio());
 
   // Dependencies
   sl.registerSingleton<ProductsApiService>(ProductsApiService(sl()));
