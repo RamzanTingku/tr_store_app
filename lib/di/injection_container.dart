@@ -9,6 +9,8 @@ import '../../features/product_list/domain/usecases/get_products.dart';
 import '../../features/product_list/domain/usecases/get_saved_products.dart';
 import '../../features/product_list/domain/usecases/remove_products.dart';
 import '../../features/product_list/domain/usecases/save_products.dart';
+import '../features/product_list/domain/usecases/remove_product.dart';
+import '../features/product_list/domain/usecases/update_product.dart';
 import '../features/product_list/domain/usecases/update_products.dart';
 
 final sl = GetIt.instance;
@@ -47,6 +49,14 @@ Future<void> initializeDependencies() async {
 
   sl.registerSingleton<UpdateProductsUseCase>(
       UpdateProductsUseCase(sl())
+  );
+
+  sl.registerSingleton<UpdateProductUseCase>(
+      UpdateProductUseCase(sl())
+  );
+
+  sl.registerSingleton<RemoveProductUseCase>(
+      RemoveProductUseCase(sl())
   );
 
 

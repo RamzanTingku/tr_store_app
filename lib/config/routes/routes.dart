@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tr_store_app/config/routes/route_constants.dart';
+import 'package:tr_store_app/features/cart/presentation/view/cart_screen.dart';
 
 import '../../features/product_list/presentation/view/product_list_screen.dart';
 
@@ -9,6 +10,9 @@ class AppRoutes {
       case '/':
       case RouteConstants.productList:
         return _materialRoute(const ProductListScreen());
+
+      case RouteConstants.cart:
+        return _materialRoute(const CartScreen());
 
       default:
         return _materialRoute(const ProductListScreen());

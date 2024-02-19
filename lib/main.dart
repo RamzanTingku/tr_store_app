@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tr_store_app/config/theme/app_themes.dart';
+import 'package:tr_store_app/features/cart/presentation/provider/cart_provider.dart';
 import 'package:tr_store_app/features/product_list/presentation/provider/product_list_provider.dart';
 import 'package:tr_store_app/features/product_list/presentation/view/product_list_screen.dart';
 
@@ -14,6 +15,8 @@ Future<void> main() async {
   await initializeDependencies();
   runApp(const MyApp());
 }
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -36,10 +39,13 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider<ProductListProvider>(
             create: (context) => ProductListProvider()),
+        ChangeNotifierProvider<CartProvider>(
+            create: (context) => CartProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: appTheme(),
+          navigatorKey: navigatorKey,
           onGenerateRoute: AppRoutes.onGenerateRoutes,
           home: const ProductListScreen()
       ),

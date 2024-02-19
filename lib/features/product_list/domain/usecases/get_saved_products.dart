@@ -11,4 +11,8 @@ class GetSavedProductsUseCase{
     return await _productRepository.getSavedProducts();
   }
 
+  Stream<List<ProductEntity>> getSavedProductsStream(){
+    return _productRepository.getSavedProductsStream();
+  }
+
 }

@@ -103,7 +103,7 @@ class _$ProductsDao extends ProductsDao {
   _$ProductsDao(
     this.database,
     this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database),
+  )   : _queryAdapter = QueryAdapter(database, changeListener),
         _productModelInsertionAdapter = InsertionAdapter(
             database,
             'product',
@@ -115,7 +115,8 @@ class _$ProductsDao extends ProductsDao {
                   'image': item.image,
                   'thumbnail': item.thumbnail,
                   'qty': item.qty
-                }),
+                },
+            changeListener),
         _productModelDeletionAdapter = DeletionAdapter(
             database,
             'product',
@@ -128,7 +129,8 @@ class _$ProductsDao extends ProductsDao {
                   'image': item.image,
                   'thumbnail': item.thumbnail,
                   'qty': item.qty
-                });
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -151,6 +153,21 @@ class _$ProductsDao extends ProductsDao {
             thumbnail: row['thumbnail'] as String?,
             price: row['price'] as double?,
             qty: row['qty'] as int?));
+  }
+
+  @override
+  Stream<List<ProductModel>> getProductsStream() {
+    return _queryAdapter.queryListStream('SELECT * FROM product',
+        mapper: (Map<String, Object?> row) => ProductModel(
+            id: row['id'] as int,
+            name: row['name'] as String?,
+            description: row['description'] as String?,
+            image: row['image'] as String?,
+            thumbnail: row['thumbnail'] as String?,
+            price: row['price'] as double?,
+            qty: row['qty'] as int?),
+        queryableName: 'product',
+        isView: false);
   }
 
   @override

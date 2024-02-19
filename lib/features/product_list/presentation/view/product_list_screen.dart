@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tr_store_app/features/product_list/domain/entities/product.dart';
-import 'package:tr_store_app/features/product_list/presentation/view/product_details.dart';
+import 'package:tr_store_app/features/product_list/presentation/view/widgets/product_item.dart';
+import 'package:tr_store_app/shared/utility/extensions.dart';
+import 'package:tr_store_app/shared/widgets/common_app_bar.dart';
 
 import '../../../../core/networking/internet_connectivity.dart';
-import '../../../../core/view_state/view_state.dart';
-import '../../../../core/view_state/view_state.dart';
-import '../../../../core/view_state/view_state.dart';
+import '../../../../shared/view_state/view_state.dart';
+import '../../../cart/presentation/provider/cart_provider.dart';
 import '../provider/product_list_provider.dart';
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({Key? key}) : super(key: key);
@@ -21,14 +22,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   late final StreamSubscription _internetCheckSubscription;
   late final ProductListProvider _productListProvider;
+  late final CartProvider _cartProvider;
 
 
   @override
   void initState() {
     _productListProvider = context.read<ProductListProvider>();
+    _cartProvider = context.read<CartProvider>();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _internetCheckSubscription = InternetConnectivity().connectivityStream.listen((hasInternet) {
-        _productListProvider.onConnectionUpdate(hasInternet);
+        _productListProvider.onConnectionUpdate(hasInternet, _cartProvider);
       });
     });
     super.initState();
@@ -39,12 +42,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     final productListProviderWatcher = context.watch<ProductListProvider>();
     return Scaffold(
-      appBar: AppBar(title: const Text("Product List")),
+      appBar: CommonAppBar.getAppBarWithCart(context: context, title: "Product List"),
       body: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.fromLTRB(16,16,16,0),
-          child: loadViewWithState(productListProviderWatcher),
-        ),
+        child: loadViewWithState(productListProviderWatcher),
       ),
     );
   }
@@ -63,47 +63,25 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   Widget showProducts(ProductListProvider provider) {
-    List<Widget> products = [];
-
-    for(var product in provider.productList) {
-      products.add(productItem(product));
-    }
-
-    return SingleChildScrollView(
-      child: Column(
-        children: products,
-      ),
+    return ListView.builder(
+      itemCount: provider.productList.length,
+      padding: const EdgeInsets.only(top: 16),
+      clipBehavior: Clip.hardEdge,
+      itemBuilder: (context, index) {
+        return productItem(index, provider.productList[index]);
+      },
     );
   }
 
-  Widget productItem(ProductEntity product) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(product.id.toString()??""),
-                    Row(
-                      children: [
-                        Expanded(child: Text(product.name??"")),
-                      ],
-                    ),
-                    Text(product.price.toString()??""),
-                    Text(product.qty.toString()??""),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+  Widget productItem(int index, ProductEntity product) {
+    return ProductItem(
+      product: product,
+      onRemove: (){
+        _cartProvider.updateCart(productIndex: index, product: product, updatedQty: 0);
+      },
+      onAdd: (){
+        _cartProvider.updateCart(productIndex: index, product: product, updatedQty: 1);
+      },
     );
   }
 }

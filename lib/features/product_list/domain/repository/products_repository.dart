@@ -9,9 +9,15 @@ abstract class ProductsRepository {
   // Database methods
   Future <List<ProductEntity>> getSavedProducts();
 
+  Stream<List<ProductEntity>> getSavedProductsStream();
+
   Future <void> saveProducts(List<ProductEntity> products);
 
+  Future <void> updateProduct(ProductEntity product);
+
   Future <void> updateProducts(List<ProductEntity> products);
+
+  Future <void> removeProduct(ProductEntity product);
 
   Future <void> removeProducts(List<ProductEntity> products);
 }

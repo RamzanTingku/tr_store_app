@@ -41,6 +41,11 @@ class ProductsRepositoryImpl implements ProductsRepository {
   }
 
   @override
+  Stream<List<ProductEntity>> getSavedProductsStream() {
+    return _appDatabase.productDAO.getProductsStream();
+  }
+
+  @override
   Future<void> removeProducts(List<ProductEntity> products) async{
     await _appDatabase.productDAO.deleteProducts(products.map((e) => ProductModel.fromEntity(e)).toList());
   }
@@ -54,6 +59,16 @@ class ProductsRepositoryImpl implements ProductsRepository {
   @override
   Future<void> updateProducts(List<ProductEntity> products) async {
     await _appDatabase.productDAO.updateProducts(products.map((e) => ProductModel.fromEntity(e)).toList());
+  }
+
+  @override
+  Future<void> removeProduct(ProductEntity product) async {
+    await _appDatabase.productDAO.deleteProduct(ProductModel.fromEntity(product));
+  }
+
+  @override
+  Future<void> updateProduct(ProductEntity product) async {
+    await _appDatabase.productDAO.updateProduct(ProductModel.fromEntity(product));
   }
 
 }

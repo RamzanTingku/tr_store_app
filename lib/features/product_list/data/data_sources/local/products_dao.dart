@@ -24,4 +24,7 @@ abstract class ProductsDao {
 
   @Query('SELECT * FROM product')
   Future<List<ProductModel>> getProducts();
+
+  @Query('SELECT * FROM product')
+  Stream<List<ProductModel>> getProductsStream();
 }
