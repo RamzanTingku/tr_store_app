@@ -1,0 +1,3 @@
+enum ProductListType{
+  products, cart
+}

@@ -8,6 +8,7 @@ import 'package:tr_store_app/shared/utility/extensions.dart';
 import 'package:tr_store_app/shared/widgets/common_app_bar.dart';
 
 import '../../../../core/networking/internet_connectivity.dart';
+import '../../../../shared/view_state/product_list_type.dart';
 import '../../../../shared/view_state/view_state.dart';
 import '../../../cart/presentation/provider/cart_provider.dart';
 import '../provider/product_list_provider.dart';
@@ -37,7 +38,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final productListProviderWatcher = context.watch<ProductListProvider>();
@@ -55,13 +55,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
         : Center(child: Text(provider.error));
   }
 
-
-  @override
-  void dispose() {
-    _internetCheckSubscription.cancel();
-    super.dispose();
-  }
-
   Widget showProducts(ProductListProvider provider) {
     return ListView.builder(
       itemCount: provider.productList.length,
@@ -75,13 +68,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   Widget productItem(int index, ProductEntity product) {
     return ProductItem(
+      listType: ProductListType.products,
       product: product,
-      onRemove: (){
-        _cartProvider.updateCart(productIndex: index, product: product, updatedQty: 0);
-      },
-      onAdd: (){
-        _cartProvider.updateCart(productIndex: index, product: product, updatedQty: 1);
-      },
+      onUpdate: (qty){
+        _cartProvider.updateCart(productIndex: index, product: product, updatedQty: qty);
+      }
     );
+  }
+
+  @override
+  void dispose() {
+    _internetCheckSubscription.cancel();
+    super.dispose();
   }
 }

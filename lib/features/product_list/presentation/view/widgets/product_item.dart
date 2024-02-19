@@ -4,12 +4,13 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tr_store_app/features/product_list/domain/entities/product.dart';
 
 import '../../../../../config/theme/app_themes.dart';
+import '../../../../../shared/view_state/product_list_type.dart';
 
 class ProductItem extends StatelessWidget {
   final ProductEntity product;
-  final VoidCallback onAdd;
-  final VoidCallback onRemove;
-  const ProductItem({Key? key, required this.product, required this.onAdd, required this.onRemove}) : super(key: key);
+  final Function(int qty) onUpdate;
+  final ProductListType listType;
+  const ProductItem({Key? key, required this.product, required this.listType, required this.onUpdate}) : super(key: key);
 
   bool get isAdded => (product.qty??0) > 0;
 
@@ -48,16 +49,17 @@ class ProductItem extends StatelessWidget {
                   ],
                 ),
                 loadDataLine("Unit Price", product.price.toString()),
-                loadDataLine("Quantity", product.qty.toString()),
+
+                if(listType == ProductListType.cart)
+                  loadDataLine("Quantity", product.qty.toString()),
+
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ElevatedButton(
-                      style: buttonStyle,
-                        onPressed: () {
-                          isAdded ? onRemove() : onAdd();
-                    }, child: Text(isAdded ? "Remove" : "Add")),
+                    if(listType == ProductListType.cart)
+                      loadElegantButton(),
+                    loadAddRemoveButton()
                   ],
                 )
               ],
@@ -101,4 +103,41 @@ class ProductItem extends StatelessWidget {
       ),
     );
   }
+
+  Widget loadElegantButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        SizedBox(
+          width: 50,
+          child: ElevatedButton(
+              style: buttonStyle,
+              onPressed: () {
+                onUpdate((product.qty??0)+1);
+              }, child: const Text("+")),
+        ),
+        const SizedBox(width: 16),
+        SizedBox(
+          width: 50,
+          child: ElevatedButton(
+          style: buttonStyle,
+          onPressed: () {
+            onUpdate((product.qty??0)-1);
+          }, child: const Text("-")),
+        ),
+
+        const SizedBox(width: 16),
+      ],
+    );
+  }
+
+  Widget loadAddRemoveButton() {
+    return ElevatedButton(
+        style: buttonStyle,
+        onPressed: () {
+          isAdded ? onUpdate(0) : onUpdate(1);
+        }, child: Text(isAdded ? "Remove" : "Add"));
+  }
 }
+
+

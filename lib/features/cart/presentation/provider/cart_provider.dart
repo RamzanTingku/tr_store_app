@@ -28,13 +28,8 @@ class CartProvider extends ChangeNotifier {
   Future<void> getAddedProducts() async {
     productList = await _getSavedProductsUseCase.getSavedProducts();
     totalPrice = 0;
-    cartList = productList.where((element) {
-      if((element.qty??0)>0){
-        totalPrice += (element.qty??0)*(element.price??0);
-        return true;
-      }
-      return false;
-    }).toList();
+    cartList = productList.where((element) => (element.qty??0)>0).toList();
+    _updateTotalPrice();
     updateViewState(cartList);
   }
 
@@ -57,12 +52,12 @@ class CartProvider extends ChangeNotifier {
 
     if (productList.isEmpty) await getAddedProducts();
 
-    int qty = product.qty ?? 0;
-    product = product.updateQty(updatedQty>0 ? qty + updatedQty: 0);
+    product = product.updateQty(updatedQty>0 ? updatedQty : 0);
 
     ///update view
     _updateCartList(cartIndex, product);
     _updateProductList(productIndex, product);
+    _updateTotalPrice();
     _updateOtherProviders();
 
     ///update database
@@ -71,7 +66,7 @@ class CartProvider extends ChangeNotifier {
 
   void _updateOtherProviders(){
     navigatorKey.currentContext!.read<ProductListProvider>().productList = productList;
-    notifyListeners();
+    updateViewState(cartList);
   }
 
   void _updateCartList(int? cartIndex, ProductEntity entity) {
@@ -97,6 +92,15 @@ class CartProvider extends ChangeNotifier {
 
     if(!index.isNegative){
       productList[index] = entity;
+    }
+  }
+
+  void _updateTotalPrice(){
+    totalPrice = 0;
+    for (var element in cartList) {
+      if((element.qty??0)>0){
+        totalPrice += (element.qty??0)*(element.price??0);
+      }
     }
   }
 }
