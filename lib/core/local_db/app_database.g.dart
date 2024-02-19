@@ -171,6 +171,20 @@ class _$ProductsDao extends ProductsDao {
   }
 
   @override
+  Future<ProductModel?> findProductById(int id) async {
+    return _queryAdapter.query('SELECT * FROM product WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => ProductModel(
+            id: row['id'] as int,
+            name: row['name'] as String?,
+            description: row['description'] as String?,
+            image: row['image'] as String?,
+            thumbnail: row['thumbnail'] as String?,
+            price: row['price'] as double?,
+            qty: row['qty'] as int?),
+        arguments: [id]);
+  }
+
+  @override
   Future<void> insertProduct(ProductModel product) async {
     await _productModelInsertionAdapter.insert(
         product, OnConflictStrategy.replace);

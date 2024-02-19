@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tr_store_app/config/routes/route_constants.dart';
 import 'package:tr_store_app/features/product_list/domain/entities/product.dart';
 
 import '../../../../../config/theme/app_themes.dart';
@@ -10,62 +11,68 @@ class ProductItem extends StatelessWidget {
   final ProductEntity product;
   final Function(int qty) onUpdate;
   final ProductListType listType;
-  const ProductItem({Key? key, required this.product, required this.listType, required this.onUpdate}) : super(key: key);
+  const ProductItem({Key? key, required this.product,
+    required this.listType, required this.onUpdate}) : super(key: key);
 
   bool get isAdded => (product.qty??0) > 0;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-      margin: const EdgeInsets.only(bottom: 14, right: 16, left: 16),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(4),
-          boxShadow: const [
-            BoxShadow(
-                color: Color.fromRGBO(15, 15, 15, 0.15),
-                spreadRadius: 0,
-                blurRadius: 7,
-                offset: Offset(0,-1)
-            )
-          ]
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          loadImage(product.thumbnail),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: Text(product.name??"", style: const TextStyle(
-                      fontWeight: FontWeight.w500
-                    ),)),
-                  ],
-                ),
-                loadDataLine("Unit Price", product.price.toString()),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, RouteConstants.productDetails, arguments: product);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+        margin: const EdgeInsets.only(bottom: 14, right: 16, left: 16),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(4),
+            boxShadow: const [
+              BoxShadow(
+                  color: Color.fromRGBO(15, 15, 15, 0.15),
+                  spreadRadius: 0,
+                  blurRadius: 7,
+                  offset: Offset(0,-1)
+              )
+            ]
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            loadImage(product.thumbnail),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(child: Text(product.name??"", style: const TextStyle(
+                        fontWeight: FontWeight.w500
+                      ),)),
+                    ],
+                  ),
+                  loadDataLine("Unit Price", product.price.toString()),
 
-                if(listType == ProductListType.cart)
-                  loadDataLine("Quantity", product.qty.toString()),
+                  if(listType == ProductListType.cart)
+                    loadDataLine("Quantity", product.qty.toString()),
 
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if(listType == ProductListType.cart)
-                      loadElegantButton(),
-                    loadAddRemoveButton()
-                  ],
-                )
-              ],
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if(listType == ProductListType.cart)
+                        loadElegantButton(),
+                      loadAddRemoveButton()
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

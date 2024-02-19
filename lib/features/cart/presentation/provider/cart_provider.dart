@@ -8,6 +8,7 @@ import 'package:tr_store_app/shared/utility/extensions.dart';
 import '../../../../di/injection_container.dart';
 import '../../../../main.dart';
 import '../../../../shared/view_state/view_state.dart';
+import '../../../product_details/presentation/provider/product_details_provider.dart';
 import '../../../product_list/domain/usecases/get_saved_products.dart';
 import '../../../product_list/domain/usecases/remove_product.dart';
 import '../../../product_list/domain/usecases/update_product.dart';
@@ -58,14 +59,15 @@ class CartProvider extends ChangeNotifier {
     _updateCartList(cartIndex, product);
     _updateProductList(productIndex, product);
     _updateTotalPrice();
-    _updateOtherProviders();
+    _updateOtherProviders(product);
 
     ///update database
     _updateProductUseCase.updateProducts(product);
   }
 
-  void _updateOtherProviders(){
+  void _updateOtherProviders(ProductEntity product){
     navigatorKey.currentContext!.read<ProductListProvider>().productList = productList;
+    navigatorKey.currentContext!.read<ProductDetailsProvider>().product = product;
     updateViewState(cartList);
   }
 

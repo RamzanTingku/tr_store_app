@@ -38,6 +38,9 @@ dependencies:
 
   shimmer: ^3.0.0
 
+  #to log api response
+  pretty_dio_logger: ^1.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

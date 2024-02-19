@@ -27,4 +27,7 @@ abstract class ProductsDao {
 
   @Query('SELECT * FROM product')
   Stream<List<ProductModel>> getProductsStream();
+
+  @Query('SELECT * FROM product WHERE id = :id')
+  Future<ProductModel?> findProductById(int id);
 }

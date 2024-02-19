@@ -8,6 +8,7 @@ import 'package:tr_store_app/features/product_list/presentation/view/product_lis
 import 'config/routes/routes.dart';
 import 'core/networking/internet_connectivity.dart';
 import 'di/injection_container.dart';
+import 'features/product_details/presentation/provider/product_details_provider.dart';
 
 
 Future<void> main() async {
@@ -41,6 +42,8 @@ class _MyAppState extends State<MyApp> {
             create: (context) => ProductListProvider()),
         ChangeNotifierProvider<CartProvider>(
             create: (context) => CartProvider()),
+        ChangeNotifierProvider<ProductDetailsProvider>(
+            create: (context) => ProductDetailsProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
